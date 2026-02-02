@@ -1,0 +1,143 @@
+{% extends 'editor/base.html' %}
+{% load static %}
+
+{% block title %}Editor - {{ template.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    #canvasContainer {
+        position: relative;
+        border: 2px solid #ddd;
+        background: #f8f9fa;
+        display: inline-block;
+    }
+    #canvas {
+        cursor: move;
+        background: white;
+    }
+    .tool-btn {
+        margin: 5px;
+    }
+    .selected-element {
+        border: 2px dashed #007bff !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row">
+        <!-- Toolbar -->
+        <div class="col-md-3">
+            <div class="card sticky-top" style="top: 20px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-tools"></i> Tools</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Text Tools -->
+                    <h6 class="border-bottom pb-2">Add Text</h6>
+                    <div class="mb-3">
+                        <input type="text" id="textInput" class="form-control mb-2" placeholder="Enter text">
+                        <select id="fontFamily" class="form-select mb-2">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier New</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Verdana">Verdana</option>
+                            <option value="Comic Sans MS">Comic Sans MS</option>
+                        </select>
+                        <input type="number" id="fontSize" class="form-control mb-2" value="24" min="10" max="200" placeholder="Font Size">
+                        <input type="color" id="textColor" class="form-control mb-2" value="#000000">
+                        <button id="addTextBtn" class="btn btn-success w-100">
+                            <i class="fas fa-plus"></i> Add Text
+                        </button>
+                    </div>
+
+                    <!-- Image Tools -->
+                    <h6 class="border-bottom pb-2 mt-4">Add Image</h6>
+                    <div class="mb-3">
+                        <input type="file" id="imageUpload" class="form-control mb-2" accept="image/*">
+                        <button id="uploadImageBtn" class="btn btn-info w-100 mb-2">
+                            <i class="fas fa-upload"></i> Upload Image
+                        </button>
+                    </div>
+
+                    <!-- User Images -->
+                    {% if user_images %}
+                    <div class="mb-3">
+                        <label class="form-label">Your Images:</label>
+                        <div class="row g-2" id="userImagesList">
+                            {% for img in user_images %}
+                            <div class="col-6">
+                                <img src="{{ img.image.url }}" class="img-thumbnail user-image-thumb" 
+                                     style="cursor: pointer; width: 100%; height: 80px; object-fit: cover;"
+                                     data-url="{{ img.image.url }}">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Element Controls -->
+                    <h6 class="border-bottom pb-2 mt-4">Element Controls</h6>
+                    <div class="btn-group-vertical w-100" role="group">
+                        <button id="deleteBtn" class="btn btn-danger mb-2">
+                            <i class="fas fa-trash"></i> Delete Selected
+                        </button>
+                        <button id="bringToFrontBtn" class="btn btn-secondary mb-2">
+                            <i class="fas fa-arrow-up"></i> Bring to Front
+                        </button>
+                        <button id="sendToBackBtn" class="btn btn-secondary mb-2">
+                            <i class="fas fa-arrow-down"></i> Send to Back
+                        </button>
+                    </div>
+
+                    <!-- Save Design -->
+                    <h6 class="border-bottom pb-2 mt-4">Save Design</h6>
+                    <div class="mb-3">
+                        <input type="text" id="designName" class="form-control mb-2" placeholder="Design name">
+                        <button id="saveDesignBtn" class="btn btn-primary w-100 mb-2">
+                            <i class="fas fa-save"></i> Save Design
+                        </button>
+                        <button id="downloadBtn" class="btn btn-success w-100">
+                            <i class="fas fa-download"></i> Download Image
+                        </button>
+                    </div>
+
+                    <a href="{% url 'template_list' %}" class="btn btn-secondary w-100">
+                        <i class="fas fa-arrow-left"></i> Back to Templates
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-image"></i> Editing: {{ template.name }}
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <div id="canvasContainer" class="mx-auto">
+                        <canvas id="canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const templateId = {{ template.id }};
+    const templateImageUrl = "{{ template.image.url }}";
+    const uploadUserImageUrl = "{% url 'upload_user_image' %}";
+    const saveDesignUrl = "{% url 'save_design' %}";
+    const csrfToken = "{{ csrf_token }}";
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'editor/js/canvas-editor.js' %}"></script>
+{% endblock %}

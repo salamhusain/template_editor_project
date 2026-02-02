@@ -1,0 +1,58 @@
+{% extends 'editor/base.html' %}
+
+{% block title %}Templates - Template Editor{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Choose a Template</h1>
+    
+    {% if admin_templates %}
+    <h3 class="mt-4">Admin Templates</h3>
+    <div class="row g-4">
+        {% for template in admin_templates %}
+        <div class="col-md-3">
+            <div class="card template-card h-100">
+                <img src="{{ template.image.url }}" class="card-img-top" alt="{{ template.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ template.name }}</h5>
+                    <a href="{% url 'editor' template.id %}" class="btn btn-primary btn-sm w-100">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if user.is_authenticated and user_templates %}
+    <h3 class="mt-5">My Templates</h3>
+    <div class="row g-4">
+        {% for template in user_templates %}
+        <div class="col-md-3">
+            <div class="card template-card h-100">
+                <img src="{{ template.image.url }}" class="card-img-top" alt="{{ template.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ template.name }}</h5>
+                    <a href="{% url 'editor' template.id %}" class="btn btn-primary btn-sm w-100">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if not admin_templates and not user_templates %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> No templates available yet. 
+        {% if user.is_authenticated %}
+        <a href="{% url 'template_upload' %}">Upload your first template</a>
+        {% else %}
+        Please login to upload templates.
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

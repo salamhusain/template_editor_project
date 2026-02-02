@@ -1,0 +1,55 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.template-card {
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.template-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+#canvasContainer {
+    max-width: 100%;
+    overflow: auto;
+}
+
+.user-image-thumb {
+    transition: all 0.2s;
+}
+
+.user-image-thumb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+.btn {
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.sticky-top {
+    z-index: 100;
+}
+
+@media (max-width: 768px) {
+    .sticky-top {
+        position: relative !important;
+    }
+}

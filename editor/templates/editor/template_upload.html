@@ -1,0 +1,39 @@
+{% extends 'editor/base.html' %}
+
+{% block title %}Upload Template - Template Editor{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-upload"></i> Upload Template</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_name" class="form-label">Template Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_image" class="form-label">Template Image</label>
+                            {{ form.image }}
+                            <small class="form-text text-muted">Supported formats: JPG, PNG, GIF</small>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Upload Template
+                            </button>
+                            <a href="{% url 'template_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Templates
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
