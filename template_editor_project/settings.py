@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-c)raq(etz@59j@en-hu9=_8jg@h4^flg%etb9pk!dl3v54%g2g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',  # Added for media files
+                'editor.context_processors.admin_stats',
             ],
         },
     },
@@ -132,3 +133,14 @@ LOGIN_URL = '/admin/login/'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# image size 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+
+
+# Admin Site Customization
+ADMIN_SITE_HEADER = "Forthicon Admin"
+ADMIN_SITE_TITLE = "Forthicon Admin Portal"
+ADMIN_INDEX_TITLE = "Welcome to Forthicon Template Editor"
+
