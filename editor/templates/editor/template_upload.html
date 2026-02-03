@@ -1,30 +1,139 @@
 {% extends 'editor/base.html' %}
+{% load static %}
 
 {% block title %}Upload Template - Template Editor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .category-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .form-label i {
+        color: #007bff;
+        margin-right: 5px;
+    }
+    
+    .or-divider {
+        text-align: center;
+        margin: 15px 0;
+        position: relative;
+    }
+    
+    .or-divider:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #ddd;
+    }
+    
+    .or-divider span {
+        background: #f8f9fa;
+        padding: 0 15px;
+        position: relative;
+        font-weight: 600;
+        color: #666;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0"><i class="fas fa-upload"></i> Upload Template</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="id_name" class="form-label">Template Name</label>
+                        
+                        <!-- Template Name -->
+                        <div class="mb-4">
+                            <label for="id_name" class="form-label">
+                                <i class="fas fa-tag"></i> Template Name
+                            </label>
                             {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                            {% endif %}
                         </div>
-                        <div class="mb-3">
-                            <label for="id_image" class="form-label">Template Image</label>
+                        
+                        <!-- Category Section -->
+                        <div class="category-section">
+                            <h5 class="mb-3">
+                                <i class="fas fa-folder"></i> Template Category
+                            </h5>
+                            
+                            <!-- Select Existing Category -->
+                            <div class="mb-3">
+                                <label for="selectCategory" class="form-label">
+                                    <i class="fas fa-list"></i> Select Category
+                                </label>
+                                {{ form.select_category }}
+                                <small class="form-text text-muted">
+                                    Choose from existing categories
+                                </small>
+                            </div>
+                            
+                            <!-- OR Divider -->
+                            <div class="or-divider">
+                                <span>OR</span>
+                            </div>
+                            
+                            <!-- Custom Category -->
+                            <div class="mb-3">
+                                <label for="customCategory" class="form-label">
+                                    <i class="fas fa-plus-circle"></i> Custom Category
+                                </label>
+                                {{ form.custom_category }}
+                                <small class="form-text text-muted">
+                                    Enter a new category name to create one
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- Template Image -->
+                        <div class="mb-4">
+                            <label for="id_image" class="form-label">
+                                <i class="fas fa-image"></i> Template Image
+                            </label>
                             {{ form.image }}
-                            <small class="form-text text-muted">Supported formats: JPG, PNG, GIF</small>
+                            <small class="form-text text-muted">
+                                Supported formats: JPG, PNG, GIF (Max 10MB)
+                            </small>
+                            {% if form.image.errors %}
+                                <div class="text-danger small mt-1">{{ form.image.errors }}</div>
+                            {% endif %}
                         </div>
+                        
+                        <!-- Image Preview -->
+                        <div class="mb-4" id="imagePreview" style="display: none;">
+                            <label class="form-label">
+                                <i class="fas fa-eye"></i> Preview
+                            </label>
+                            <div class="text-center">
+                                <img id="previewImg" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                            </div>
+                        </div>
+                        
+                        <!-- Buttons -->
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Upload Template
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-cloud-upload-alt"></i> Upload Template
                             </button>
                             <a href="{% url 'template_list' %}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Back to Templates
@@ -36,4 +145,41 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Image preview functionality
+    document.getElementById('id_image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Category selection logic
+    const selectCategory = document.getElementById('selectCategory');
+    const customCategory = document.getElementById('customCategory');
+    
+    selectCategory.addEventListener('change', function() {
+        if (this.value) {
+            customCategory.value = '';
+            customCategory.disabled = true;
+        } else {
+            customCategory.disabled = false;
+        }
+    });
+    
+    customCategory.addEventListener('input', function() {
+        if (this.value.trim()) {
+            selectCategory.value = '';
+            selectCategory.disabled = true;
+        } else {
+            selectCategory.disabled = false;
+        }
+    });
+</script>
 {% endblock %}
