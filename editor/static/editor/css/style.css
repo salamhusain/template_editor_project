@@ -21,6 +21,14 @@ body {
 #canvasContainer {
     max-width: 100%;
     overflow: auto;
+    display: inline-block;
+}
+
+#canvas {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .user-image-thumb {
@@ -48,8 +56,262 @@ body {
     z-index: 100;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
     .sticky-top {
         position: relative !important;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    #canvasContainer {
+        width: 100%;
+    }
+    
+    #canvas {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .template-card img {
+        height: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .card-header h5 {
+        font-size: 1rem;
+    }
+    
+    .btn {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .template-card img {
+        height: 120px;
+    }
+    
+    .form-control, .form-select {
+        font-size: 0.875rem;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        padding: 0.625rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .user-image-thumb {
+        height: 100px !important;
+    }
+}
+
+/* Canvas container responsive */
+.canvas-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Improve form inputs on mobile */
+@media (max-width: 768px) {
+    input[type="text"],
+    input[type="number"],
+    input[type="color"],
+    input[type="file"],
+    select {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+    }
+}
+
+
+/* salam version 3 */
+
+/* Beautiful Edit Modal Styles */
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.form-label i {
+    color: #007bff;
+    margin-right: 5px;
+}
+
+#editTextInput {
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s;
+    resize: vertical;
+}
+
+#editTextInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+}
+
+.form-control-color {
+    width: 60px;
+    height: 45px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.form-control-color:hover {
+    border-color: #007bff;
+    transform: scale(1.05);
+}
+
+#editTextColorHex {
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    text-align: center;
+    font-weight: 600;
+}
+
+.color-presets {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.color-preset-btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.color-preset-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.color-preset-btn:active {
+    transform: scale(1.05);
+}
+
+.form-select {
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+}
+
+.form-range {
+    height: 8px;
+}
+
+.form-range::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: #0056b3;
+}
+
+.form-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.form-range::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    background: #0056b3;
+}
+
+#fontSizeValue {
+    font-weight: 700;
+    color: #007bff;
+    font-size: 1.1rem;
+}
+
+/* Modal animations */
+.modal.fade .modal-dialog {
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Responsive Modal */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .modal-content {
+        border-radius: 10px;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 1rem;
+    }
+    
+    .color-preset-btn {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .form-control-color {
+        width: 50px;
+        height: 40px;
     }
 }
