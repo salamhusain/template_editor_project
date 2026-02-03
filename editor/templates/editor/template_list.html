@@ -4,17 +4,71 @@
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="mb-4">Choose a Template</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-palette"></i> Choose a Template</h1>
+        {% if user.is_authenticated %}
+        <a href="{% url 'template_upload' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Upload Template
+        </a>
+        {% endif %}
+    </div>
     
+    <!-- Category Filter -->
+    {% if categories %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="fas fa-filter"></i> Filter By Category
+            </h5>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{% url 'template_list' %}" 
+                   class="btn {% if not selected_category %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    <i class="fas fa-th"></i> All Templates
+                </a>
+                {% for category in categories %}
+                <a href="?category={{ category.id }}" 
+                   class="btn {% if selected_category.id == category.id %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    <i class="fas fa-folder"></i> {{ category.name }}
+                    <span class="badge bg-light text-dark ms-1">{{ category.templates.count }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Selected Category Info -->
+    {% if selected_category %}
+    <div class="alert alert-info d-flex justify-content-between align-items-center">
+        <span>
+            <i class="fas fa-info-circle"></i> Showing templates in category: 
+            <strong>{{ selected_category.name }}</strong>
+        </span>
+        <a href="{% url 'template_list' %}" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-times"></i> Reset Filter
+        </a>
+    </div>
+    {% endif %}
+    
+    <!-- Admin Templates -->
     {% if admin_templates %}
-    <h3 class="mt-4">Admin Templates</h3>
+    <h3 class="mt-4 mb-3">
+        <i class="fas fa-crown text-warning"></i> Admin Templates
+    </h3>
     <div class="row g-4">
         {% for template in admin_templates %}
         <div class="col-md-3">
-            <div class="card template-card h-100">
+            <div class="card template-card h-100 shadow-sm">
                 <img src="{{ template.image.url }}" class="card-img-top" alt="{{ template.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ template.name }}</h5>
+                    {% if template.category %}
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-folder"></i> {{ template.category.name }}
+                        </small>
+                    </p>
+                    {% endif %}
                     <a href="{% url 'editor' template.id %}" class="btn btn-primary btn-sm w-100">
                         <i class="fas fa-edit"></i> Edit
                     </a>
@@ -25,15 +79,25 @@
     </div>
     {% endif %}
     
+    <!-- User Templates -->
     {% if user.is_authenticated and user_templates %}
-    <h3 class="mt-5">My Templates</h3>
+    <h3 class="mt-5 mb-3">
+        <i class="fas fa-user"></i> My Templates
+    </h3>
     <div class="row g-4">
         {% for template in user_templates %}
         <div class="col-md-3">
-            <div class="card template-card h-100">
+            <div class="card template-card h-100 shadow-sm">
                 <img src="{{ template.image.url }}" class="card-img-top" alt="{{ template.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ template.name }}</h5>
+                    {% if template.category %}
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-folder"></i> {{ template.category.name }}
+                        </small>
+                    </p>
+                    {% endif %}
                     <a href="{% url 'editor' template.id %}" class="btn btn-primary btn-sm w-100">
                         <i class="fas fa-edit"></i> Edit
                     </a>
@@ -44,13 +108,20 @@
     </div>
     {% endif %}
     
+    <!-- No Templates Message -->
     {% if not admin_templates and not user_templates %}
     <div class="alert alert-info">
-        <i class="fas fa-info-circle"></i> No templates available yet. 
+        <i class="fas fa-info-circle"></i> 
+        {% if selected_category %}
+        No templates found in this category. 
+        <a href="{% url 'template_list' %}">View all templates</a>
+        {% else %}
+        No templates available yet. 
         {% if user.is_authenticated %}
         <a href="{% url 'template_upload' %}">Upload your first template</a>
         {% else %}
         Please login to upload templates.
+        {% endif %}
         {% endif %}
     </div>
     {% endif %}
